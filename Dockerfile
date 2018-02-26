@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 RUN apt-get update && \
-    apt-get install -y apt-transport-https python openssl curl wget git unzip
+    apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip
 
 # Install Azure CLI.
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > \
@@ -12,8 +12,11 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheez
     apt-get install -y azure-cli && \
     rm -rf /var/lib/apt/lists/*
 
+# Install AWS CLI.
+RUN pip install awscli --upgrade
+
 # Install Terraform.
-RUN TF_VERSION="0.11.1"; \
+RUN TF_VERSION="0.11.3"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip

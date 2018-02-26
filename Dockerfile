@@ -23,6 +23,5 @@ RUN TF_VERSION="0.11.3"; \
 
 # Get ct_config terraform provider.
 RUN CT_PROV_VERSION="v0.2.1"; \
-    mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
     wget https://github.com/coreos/terraform-provider-ct/releases/download/${CT_PROV_VERSION}/terraform-provider-ct-${CT_PROV_VERSION}-linux-amd64.tar.gz && \
-    tar xf terraform-provider-ct-${CT_PROV_VERSION}-linux-amd64.tar.gz -C /root/.terraform.d/plugins/linux_amd64 --strip=1
+    tar xf terraform-provider-ct-${CT_PROV_VERSION}-linux-amd64.tar.gz -C /bin --strip=1

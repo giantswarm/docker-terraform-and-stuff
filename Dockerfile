@@ -28,12 +28,12 @@ RUN TF_VERSION="0.11.3"; \
 # Links:
 # 1 - https://github.com/coreos/terraform-provider-ct/issues/21
 
-# Install Go 1.9.
+# Install Go 1.10.
 RUN add-apt-repository --yes ppa:gophers/archive && \
     apt-get update && \
-    apt-get install -y golang-1.9-go && \
+    apt-get install -y golang-1.10-go && \
     rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/lib/go-1.9/bin/go /usr/local/bin/go
+    ln -sf /usr/lib/go-1.10/bin/go /usr/local/bin/go
 
 # Build ct_config provider from sources.
 RUN export GOPATH="/opt/go" && \

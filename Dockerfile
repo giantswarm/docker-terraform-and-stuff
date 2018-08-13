@@ -1,5 +1,7 @@
 FROM ubuntu:xenial
 
+ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
+
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
         software-properties-common
@@ -34,8 +36,11 @@ RUN add-apt-repository --yes ppa:gophers/archive && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/lib/go-1.10/bin/go /usr/local/bin/go
 
-# Build ct_config provider from sources.
+# Build ct_config and gotemplate providers from sources.
 RUN export GOPATH="/opt/go" && \
     mkdir -p ${GOPATH} && \
+    mkdir -p ${HOME}/.terraform.d/plugins/linux_amd64 && \
     go get -u github.com/coreos/terraform-provider-ct && \
-    ln -sf ${GOPATH}/bin/terraform-provider-ct /bin/terraform-provider-ct
+    ln -sf ${GOPATH}/bin/terraform-provider-ct /bin/terraform-provider-ct && \
+    go get -u github.com/giantswarm/terraform-provider-gotemplate && \
+    ln -sf ${GOPATH}/bin/terraform-provider-gotemplate ${HOME}/.terraform.d/plugins/linux_amd64/terraform-provider-gotemplate

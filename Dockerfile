@@ -1,5 +1,7 @@
 FROM ubuntu:xenial
 
+ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
+
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
         software-properties-common
@@ -42,4 +44,3 @@ RUN export GOPATH="/opt/go" && \
     ln -sf ${GOPATH}/bin/terraform-provider-ct /bin/terraform-provider-ct && \
     go get -u github.com/giantswarm/terraform-provider-gotemplate && \
     ln -sf ${GOPATH}/bin/terraform-provider-gotemplate ${HOME}/.terraform.d/plugins/linux_amd64/terraform-provider-gotemplate
-

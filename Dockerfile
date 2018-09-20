@@ -1,10 +1,12 @@
 FROM ubuntu:xenial
 
 ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
+ENV KUBECTL_VERSION "v1.11.3"
+
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
-        software-properties-common
+        software-properties-common wget curl openssh-client openvpn
 
 # Install Azure CLI.
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > \
@@ -44,3 +46,11 @@ RUN export GOPATH="/opt/go" && \
     ln -sf ${GOPATH}/bin/terraform-provider-ct /bin/terraform-provider-ct && \
     go get -u github.com/giantswarm/terraform-provider-gotemplate && \
     ln -sf ${GOPATH}/bin/terraform-provider-gotemplate ${HOME}/.terraform.d/plugins/linux_amd64/terraform-provider-gotemplate
+
+# download kubectl
+RUN curl -o /usr/local/bin/kubectl  \
+    https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
+# add github ssh signature
+ADD ./.github_known_host /root/.ssh/known_hosts

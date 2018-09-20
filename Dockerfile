@@ -53,4 +53,4 @@ RUN curl -o /usr/local/bin/kubectl  \
     chmod +x /usr/local/bin/kubectl
 
 # add github ssh signature
-RUN ./.github_known_host /root/.ssh/known_hosts
+ADD ./.github_known_host /root/.ssh/known_hosts

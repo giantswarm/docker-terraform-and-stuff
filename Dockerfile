@@ -56,4 +56,4 @@ RUN curl -o /usr/local/bin/kubectl  \
 ADD ./.github_known_host /root/.ssh/known_hosts
 
 # create user with jenkins id
-RUN useradd -u 113 -g 117 jenkins -m
+RUN useradd -u 113 jenkins -m

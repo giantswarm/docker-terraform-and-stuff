@@ -56,7 +56,7 @@ RUN curl -o /usr/local/bin/kubectl  \
     chmod +x /usr/local/bin/kubectl
 
 # create user with jenkins id
-RUN useradd -u 113 jenkins -m && mkdir -p /home/jenkins/.ssh -m 700
+RUN useradd -u 113 jenkins -m
 
 # add github ssh signature
-ADD ./.github_known_host /home/jenkins/.ssh/known_hosts
+ADD ./.github_known_host /home/jenkins/known_hosts

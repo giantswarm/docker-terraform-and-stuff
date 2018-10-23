@@ -6,7 +6,7 @@ ENV KUBECTL_VERSION "v1.11.3"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
-        software-properties-common wget curl openssh-client openvpn
+        software-properties-common wget curl openssh-client openvpn ansible
 
 # Install Azure CLI.
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > \

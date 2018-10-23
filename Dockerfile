@@ -6,7 +6,7 @@ ENV KUBECTL_VERSION "v1.11.3"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
-        software-properties-common wget curl openssh-client openvpn ansible
+        software-properties-common wget curl openssh-client openvpn
 
 # Install Azure CLI.
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > \
@@ -23,6 +23,9 @@ RUN TF_VERSION="0.11.8"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip
+
+# Install ansible
+RUN pip install ansible --upgrade
 
 # We need to build ct_config terraform provider from sources, because of two things:
 # 1. it's still not avaialble in terraform repos [1].

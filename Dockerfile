@@ -52,8 +52,8 @@ RUN curl -o /usr/local/bin/kubectl  \
     https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
     chmod +x /usr/local/bin/kubectl
 
-# add github ssh signature
-ADD ./.github_known_host /root/.ssh/known_hosts
-
 # create user with jenkins id
-RUN useradd -u 113 jenkins -m
+RUN useradd -u 113 jenkins -m && mkdir -p /home/jenkins/.ssh -m 700
+
+# add github ssh signature
+ADD ./.github_known_host /home/jenkins/.ssh/known_hosts

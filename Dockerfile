@@ -24,6 +24,9 @@ RUN TF_VERSION="0.11.8"; \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip
 
+# Install ansible
+RUN pip install ansible --upgrade
+
 # We need to build ct_config terraform provider from sources, because of two things:
 # 1. it's still not avaialble in terraform repos [1].
 # 2. latest binary release v0.2.1 is too old and does not support passwd groups.
@@ -52,5 +55,5 @@ RUN curl -o /usr/local/bin/kubectl  \
     https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
     chmod +x /usr/local/bin/kubectl
 
-# add github ssh signature
-ADD ./.github_known_host /root/.ssh/known_hosts
+# create user with jenkins id
+RUN groupadd -g 117 jenkins && useradd -u 113 jenkins -g 117 -m

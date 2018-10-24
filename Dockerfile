@@ -6,7 +6,7 @@ ENV KUBECTL_VERSION "v1.11.3"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
-        software-properties-common wget curl openssh-client openvpn
+        software-properties-common wget curl openssh-client openvpn sudo
 
 # Install Azure CLI.
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > \
@@ -56,4 +56,7 @@ RUN curl -o /usr/local/bin/kubectl  \
     chmod +x /usr/local/bin/kubectl
 
 # create user with jenkins id
-RUN groupadd -g 117 jenkins && useradd -u 113 jenkins -g 117 -m
+RUN groupadd -g 117 jenkins && useradd -u 113 jenkins -g 117,sudo -m
+
+# add sudo rules for openvpn for jenkins
+RUN echo "jenkins ALL = (root) NOPASSWD: /usr/sbin/openvpn" >> /etc/sudoers

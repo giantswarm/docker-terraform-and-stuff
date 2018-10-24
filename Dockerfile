@@ -59,4 +59,4 @@ RUN curl -o /usr/local/bin/kubectl  \
 RUN groupadd -g 117 jenkins && useradd -u 113 jenkins -g 117 -G sudo -m
 
 # add sudo rules for openvpn for jenkins
-RUN echo "jenkins ALL = (root) NOPASSWD: /usr/sbin/openvpn" >> /etc/sudoers
+RUN echo "jenkins ALL = (root) NOPASSWD: /usr/sbin/openvpn,/bin/kill" >> /etc/sudoers

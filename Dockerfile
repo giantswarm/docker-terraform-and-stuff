@@ -19,7 +19,7 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheez
 RUN pip install awscli --upgrade
 
 # Install Terraform.
-RUN TF_VERSION="0.11.10"; \
+RUN TF_VERSION="0.11.11"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip

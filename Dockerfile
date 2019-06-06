@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
-ENV KUBECTL_VERSION "v1.14.1"
+ENV KUBECTL_VERSION "v1.14.3"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
@@ -23,18 +23,20 @@ RUN TF_VERSION="0.12.1"; \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip
 
-RUN VERSION=v0.3.2 && \
-    mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
-    wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
-    tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
-    mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct /root/.terraform.d/plugins/linux_amd64/terraform-provider-ct
-
-# Install Go 1.10.
+# Install Go 1.11.
 RUN add-apt-repository --yes ppa:gophers/archive && \
     apt-get update && \
-    apt-get install -y golang-1.10-go && \
+    apt-get install -y golang-1.11-go && \
     rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/lib/go-1.10/bin/go /usr/local/bin/go
+    ln -sf /usr/lib/go-1.11/bin/go /usr/local/bin/go
+
+# Build ct provider from source.
+RUN mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
+    git clone https://github.com/poseidon/terraform-provider-ct.git && \
+    cd terraform-provider-ct && \
+    git checkout v0.3.2 && \
+    go build && \
+    ln -sf terraform-provider-ct /root/.terraform.d/plugins/linux_amd64/terraform-provider-ct
 
 # Build gotemplate provider from source.
 RUN export GOPATH="/opt/go" && \

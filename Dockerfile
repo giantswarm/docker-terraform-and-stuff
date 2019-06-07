@@ -1,8 +1,7 @@
 FROM ubuntu:xenial
 
 ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
-ENV KUBECTL_VERSION "v1.11.3"
-
+ENV KUBECTL_VERSION "v1.14.3"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
@@ -19,36 +18,30 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheez
 RUN pip install awscli --upgrade
 
 # Install Terraform.
-RUN TF_VERSION="0.11.11"; \
+RUN TF_VERSION="0.12.1"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip
 
-# Install ansible
-RUN pip install ansible --upgrade
-
-# We need to build ct_config terraform provider from sources, because of two things:
-# 1. it's still not avaialble in terraform repos [1].
-# 2. latest binary release v0.2.1 is too old and does not support passwd groups.
-#
-# Links:
-# 1 - https://github.com/coreos/terraform-provider-ct/issues/21
-
-# Install Go 1.10.
+# Install Go 1.11.
 RUN add-apt-repository --yes ppa:gophers/archive && \
     apt-get update && \
-    apt-get install -y golang-1.10-go && \
+    apt-get install -y golang-1.11-go && \
     rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/lib/go-1.10/bin/go /usr/local/bin/go
+    ln -sf /usr/lib/go-1.11/bin/go /usr/local/bin/go
 
-# Build ct_config and gotemplate providers from sources.
+# Install ct provider
+RUN VERSION=v0.3.2 && \
+    mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
+    wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
+    tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
+    mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
+
+# Build gotemplate provider from source.
 RUN export GOPATH="/opt/go" && \
     mkdir -p ${GOPATH} && \
-    mkdir -p ${HOME}/.terraform.d/plugins/linux_amd64 && \
-    go get -u github.com/coreos/terraform-provider-ct && \
-    ln -sf ${GOPATH}/bin/terraform-provider-ct /bin/terraform-provider-ct && \
     go get -u github.com/giantswarm/terraform-provider-gotemplate && \
-    ln -sf ${GOPATH}/bin/terraform-provider-gotemplate ${HOME}/.terraform.d/plugins/linux_amd64/terraform-provider-gotemplate
+    ln -sf ${GOPATH}/bin/terraform-provider-gotemplate /root/.terraform.d/plugins/linux_amd64/terraform-provider-gotemplate
 
 # download kubectl
 RUN curl -o /usr/local/bin/kubectl  \
@@ -57,6 +50,9 @@ RUN curl -o /usr/local/bin/kubectl  \
 
 # create user with jenkins id
 RUN groupadd -g 117 jenkins && useradd -u 113 jenkins -g 117 -G sudo -m
+
+# copy custom terraform providers for jenkins user
+RUN cp /root/.terraform.d /home/jenkins/ -R && chown jenkins:jenkins /home/jenkins/.terraform.d -R
 
 # add sudo rules for openvpn for jenkins
 RUN echo "jenkins ALL = (root) NOPASSWD: /usr/sbin/openvpn,/usr/bin/pkill" >> /etc/sudoers

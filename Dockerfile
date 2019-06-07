@@ -23,6 +23,9 @@ RUN TF_VERSION="0.12.1"; \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip
 
+# Install ansible
+RUN pip install ansible --upgrade
+
 # Install Go 1.11.
 RUN add-apt-repository --yes ppa:gophers/archive && \
     apt-get update && \

@@ -30,13 +30,12 @@ RUN add-apt-repository --yes ppa:gophers/archive && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/lib/go-1.11/bin/go /usr/local/bin/go
 
-# Build ct provider from source.
-RUN mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
-    git clone https://github.com/poseidon/terraform-provider-ct.git && \
-    cd terraform-provider-ct && \
-    git checkout v0.3.2 && \
-    go build && \
-    ln -sf $(pwd)/terraform-provider-ct /root/.terraform.d/plugins/linux_amd64/terraform-provider-ct
+# Install ct provider
+RUN VERSION=v0.3.2 && \
+    mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
+    wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
+    tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
+    mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
 
 # Build gotemplate provider from source.
 RUN export GOPATH="/opt/go" && \
@@ -51,6 +50,9 @@ RUN curl -o /usr/local/bin/kubectl  \
 
 # create user with jenkins id
 RUN groupadd -g 117 jenkins && useradd -u 113 jenkins -g 117 -G sudo -m
+
+# copy custom terraform providers for jenkins user
+RUN cp /root/.terraform.d /home/jenkins/ -R && chown jenkins:jenkins /home/jenkins/.terraform.d -R
 
 # add sudo rules for openvpn for jenkins
 RUN echo "jenkins ALL = (root) NOPASSWD: /usr/sbin/openvpn,/usr/bin/pkill" >> /etc/sudoers

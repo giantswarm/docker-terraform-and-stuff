@@ -36,7 +36,7 @@ RUN mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
     cd terraform-provider-ct && \
     git checkout v0.3.2 && \
     go build && \
-    ln -sf terraform-provider-ct /root/.terraform.d/plugins/linux_amd64/terraform-provider-ct
+    ln -sf $(pwd)/terraform-provider-ct /root/.terraform.d/plugins/linux_amd64/terraform-provider-ct
 
 # Build gotemplate provider from source.
 RUN export GOPATH="/opt/go" && \

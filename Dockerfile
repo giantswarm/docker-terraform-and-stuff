@@ -35,7 +35,7 @@ RUN VERSION=v0.3.2 && \
     mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
     wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
     tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
-    mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
+    mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/linux_amd64/terraform-provider-ct
 
 # Build gotemplate provider from source.
 RUN export GOPATH="/opt/go" && \

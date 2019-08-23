@@ -14,6 +14,12 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheez
     apt-get update && \
     apt-get install -y azure-cli
 
+# Upgrade pip
+RUN pip install --upgrade pip
+
+# Install jq
+RUN apt-get install -y jq
+
 # Install AWS CLI.
 RUN pip install awscli --upgrade
 

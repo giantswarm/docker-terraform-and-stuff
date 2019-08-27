@@ -32,6 +32,9 @@ RUN TF_VERSION="0.12.6"; \
 # Install ansible
 RUN pip install ansible --upgrade
 
+# Install yq
+RUN pip install yq --upgrade
+
 # Install Go 1.11.
 RUN add-apt-repository --yes ppa:gophers/archive && \
     apt-get update && \

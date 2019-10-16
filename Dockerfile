@@ -24,7 +24,7 @@ RUN apt-get install -y jq
 RUN pip install awscli --upgrade
 
 # Install Terraform.
-RUN TF_VERSION="0.12.6"; \
+RUN TF_VERSION="0.12.10"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip
@@ -42,15 +42,9 @@ RUN add-apt-repository --yes ppa:gophers/archive && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/lib/go-1.11/bin/go /usr/local/bin/go
 
-# Install ct provider
-RUN VERSION=v0.3.2 && \
-    mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
-    wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
-    tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz && \
-    mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/linux_amd64/terraform-provider-ct
-
 # Build gotemplate provider from source.
 RUN export GOPATH="/opt/go" && \
+    mkdir -p /root/.terraform.d/plugins/linux_amd64 && \
     mkdir -p ${GOPATH} && \
     go get -u github.com/giantswarm/terraform-provider-gotemplate && \
     ln -sf ${GOPATH}/bin/terraform-provider-gotemplate /root/.terraform.d/plugins/linux_amd64/terraform-provider-gotemplate

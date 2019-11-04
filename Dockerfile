@@ -4,8 +4,11 @@ ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
 ENV KUBECTL_VERSION "v1.14.3"
 
 RUN apt-get update && \
-    apt-get install -y apt-transport-https python python-pip openssl curl wget git unzip \
+    apt-get install -y apt-transport-https python3 python3-pip openssl curl wget git unzip \
         software-properties-common wget curl openssh-client openvpn sudo
+
+# python3 executable is called "python3" on xenial, let's symlink it to a more common name just in case
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Install Azure CLI.
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > \
@@ -15,7 +18,7 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheez
     apt-get install -y azure-cli
 
 # Upgrade pip
-RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
 
 # Install jq
 RUN apt-get install -y jq

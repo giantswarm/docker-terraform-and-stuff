@@ -27,7 +27,7 @@ RUN apt-get install -y jq
 RUN pip install awscli --upgrade
 
 # Install Terraform.
-RUN TF_VERSION="0.12.16"; \
+RUN TF_VERSION="0.12.17"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip

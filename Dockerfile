@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
-ENV KUBECTL_VERSION "v1.14.3"
+ENV KUBECTL_VERSION "v1.15.6"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python3 python3-pip openssl curl wget git unzip \
@@ -27,7 +27,7 @@ RUN apt-get install -y jq
 RUN pip install awscli --upgrade
 
 # Install Terraform.
-RUN TF_VERSION="0.12.17"; \
+RUN TF_VERSION="0.12.19"; \
     wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
     unzip terraform_${TF_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TF_VERSION}_linux_amd64.zip

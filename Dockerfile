@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 ENV PATH="/root/.terraform.d/plugins/linux_amd64/:${PATH}"
-ENV KUBECTL_VERSION "v1.15.6"
+ENV KUBECTL_VERSION "v1.17.9"
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https python3 python3-pip openssl curl wget git unzip \
